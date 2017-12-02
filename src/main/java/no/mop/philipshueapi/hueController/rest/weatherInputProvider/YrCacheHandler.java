@@ -31,18 +31,13 @@ public class YrCacheHandler {
     public void createCacheIfNotExisting() {
         path = Paths.get("yrcache.json");
         if (!Files.exists(path)) {
-            try {
-                Files.createFile(path);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+            wrapExceptions(() -> Files.createFile(path));
         }
-        Optional.ofNullable(wrapExceptions(() -> readCache())).ifPresent(entry ->
+        Optional.ofNullable(wrapExceptions(this::readCache)).ifPresent(entry ->
                 cache.put(entry.getPlace(), new Tuple<>(LocalDateTime.parse(entry.getTime()), entry.getTemperature())));
     }
 
-    public CacheEntry readCache() throws IOException {
+    private CacheEntry readCache() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         if (Files.size(path) == 0) {
             return null;
@@ -51,7 +46,7 @@ public class YrCacheHandler {
         return objectMapper.readValue(path.toFile(), CacheEntry.class);
     }
 
-    public boolean save(String currentLocation, LocalDateTime now, String temperature) throws IOException {
+    private boolean save(String currentLocation, LocalDateTime now, String temperature) throws IOException {
         CacheEntry cacheEntries = new CacheEntry(currentLocation, now.toString(), temperature);
         ObjectMapper mapper = new ObjectMapper();
         if (path == null) {
