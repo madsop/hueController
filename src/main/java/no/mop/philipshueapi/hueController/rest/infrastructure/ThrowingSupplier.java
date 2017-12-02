@@ -1,4 +1,4 @@
-package no.mop.philipshueapi.hueController.rest;
+package no.mop.philipshueapi.hueController.rest.infrastructure;
 
 @FunctionalInterface
 public interface ThrowingSupplier<T> {

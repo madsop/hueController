@@ -1,5 +1,8 @@
 package no.mop.philipshueapi.hueController.rest;
 
+import no.mop.philipshueapi.hueController.rest.hueAPI.PhilipsHueConnector;
+import no.mop.philipshueapi.hueController.rest.infrastructure.ThrowingSupplier;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.HashSet;
@@ -20,7 +23,7 @@ public class Controller {
         inputProviders = new HashSet<>();
     }
 
-    String switchStateOfLights() {
+    public String switchStateOfLights() {
         return IntStream.range(0, getAllLights())
                 .mapToObj(this::switchStateOfLight)
                 .peek(x -> System.out.println("State of light x: " + x))

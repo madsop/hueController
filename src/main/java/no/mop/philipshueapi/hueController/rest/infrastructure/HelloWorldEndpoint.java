@@ -1,4 +1,6 @@
-package no.mop.philipshueapi.hueController.rest;
+package no.mop.philipshueapi.hueController.rest.infrastructure;
+
+import no.mop.philipshueapi.hueController.rest.Controller;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -8,10 +10,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 
 @ApplicationScoped
-@Path("/hello")
+@Path("/hue")
 public class HelloWorldEndpoint {
 
 	@Inject
+	@SuppressWarnings("unused")
 	private Controller controller;
 
 	@GET

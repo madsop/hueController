@@ -1,5 +1,6 @@
 package no.mop.philipshueapi.hueController.rest;
 
+import no.mop.philipshueapi.hueController.rest.hueAPI.PhilipsHueConnector;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

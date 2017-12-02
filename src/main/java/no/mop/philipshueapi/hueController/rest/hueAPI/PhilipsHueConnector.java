@@ -1,5 +1,6 @@
-package no.mop.philipshueapi.hueController.rest;
+package no.mop.philipshueapi.hueController.rest.hueAPI;
 
+import no.mop.philipshueapi.hueController.rest.LightState;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -30,12 +31,8 @@ public class PhilipsHueConnector {
     }
 
     private HttpResponse executeHTTPGet(String path) throws IOException {
-        HttpUriRequest request = new HttpGet( getHueURL() + path);
+        HttpUriRequest request = new HttpGet( hueURL.getFullURL() + path);
         return HttpClientBuilder.create().build().execute( request );
-    }
-
-    private String getHueURL() {
-        return "http://" + hueURL.host + ":" + hueURL.port +"/hue/";
     }
 
     private String getResponseText(HttpResponse httpResponse) throws IOException {
