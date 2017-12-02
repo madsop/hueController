@@ -2,7 +2,7 @@ package no.mop.philipshueapi.hueController.rest.hueAPI;
 
 import no.mop.philipshueapi.hueController.rest.LightState;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -19,25 +19,26 @@ public class PhilipsHueConnector {
     private HueURL hueURL;
 
     public int getAllLights() throws IOException {
-        HttpResponse httpResponse = executeHTTPGet("lights");
-        String responseText = getResponseText(httpResponse);
+        String responseText = getResponseText("lights");
         return Integer.valueOf(responseText);
     }
 
     public String switchStateOfLight(int lightIndex, LightState newLightState) throws IOException {
         String path = "light/" + lightIndex + "/brightness/" + newLightState.getBrightness();
-        HttpResponse httpResponse = executeHTTPGet(path);
-        return getResponseText(httpResponse);
+        return getResponseText(path);
     }
 
-    private HttpResponse executeHTTPGet(String path) throws IOException {
-        HttpUriRequest request = new HttpGet( hueURL.getFullURL() + path);
-        return HttpClientBuilder.create().build().execute( request );
-    }
-
-    private String getResponseText(HttpResponse httpResponse) throws IOException {
-        String responsetext = IOUtils.toString(httpResponse.getEntity().getContent());
+    private String getResponseText(String path) throws IOException {
+        String responsetext = executeHTTPGet(path);
         System.out.println("Responsetext: " + responsetext);
+        return responsetext;
+    }
+
+    private String executeHTTPGet(String path) throws IOException {
+        HttpUriRequest request = new HttpGet( hueURL.getFullURL() + path);
+        CloseableHttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        String responsetext = IOUtils.toString(httpResponse.getEntity().getContent());
+        httpResponse.close();
         return responsetext;
     }
 }
