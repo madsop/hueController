@@ -9,7 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -27,8 +27,8 @@ public class ControllerTest {
     public void forwardsToController() throws IOException {
         doReturn(Integer.valueOf(2)).when(connector).getAllLights();
         controller.switchStateOfLights();
-        verify(connector).switchStateOfLight(eq(0), anyInt());
-        verify(connector).switchStateOfLight(eq(1), anyInt());
+        verify(connector).switchStateOfLight(eq(0), any());
+        verify(connector).switchStateOfLight(eq(1), any());
     }
 
 }
