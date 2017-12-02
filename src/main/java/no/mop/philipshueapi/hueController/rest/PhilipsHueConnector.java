@@ -7,19 +7,24 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.IOException;
 
 @ApplicationScoped
 public class PhilipsHueConnector {
 
+    @Inject
+    @SuppressWarnings("unused")
+    private HueURL hueURL;
+
     public Integer getAllLights() throws IOException {
-        HttpResponse httpResponse = executeHTTPGet("hue/lights");
+        HttpResponse httpResponse = executeHTTPGet("lights");
         String responseText = getResponseText(httpResponse);
         return Integer.valueOf(responseText);
     }
 
-    public String switchStateOfLight(int lightIndex, int brightness) throws IOException {
-        String path = "/light/" + lightIndex + "/brightness/" + brightness;
+    public String switchStateOfLight(int lightIndex, LightState newLightState) throws IOException {
+        String path = "light/" + lightIndex + "/brightness/" + newLightState.getBrightness();
         HttpResponse httpResponse = executeHTTPGet(path);
         return getResponseText(httpResponse);
     }
@@ -30,10 +35,12 @@ public class PhilipsHueConnector {
     }
 
     private String getHueURL() {
-        return "http://localhost:8081/";
+        return "http://" + hueURL.host + ":" + hueURL.port +"/hue/";
     }
 
     private String getResponseText(HttpResponse httpResponse) throws IOException {
-        return IOUtils.toString(httpResponse.getEntity().getContent());
+        String responsetext = IOUtils.toString(httpResponse.getEntity().getContent());
+        System.out.println("Responsetext: " + responsetext);
+        return responsetext;
     }
 }

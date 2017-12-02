@@ -24,6 +24,6 @@ public class HelloWorldEndpoint {
 	@GET
 	@Produces("text/plain")
 	public Response switchState() {
-		return Response.ok(controller).build();
+		return Response.ok(controller.switchStateOfLights()).build();
 	}
 }
