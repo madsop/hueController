@@ -2,6 +2,7 @@ package no.mop.philipshueapi.hueController.rest.infrastructure;
 
 import no.mop.philipshueapi.hueController.rest.Controller;
 import no.mop.philipshueapi.hueController.rest.clockInputProvider.ClockInputProvider;
+import no.mop.philipshueapi.hueController.rest.weatherInputProvider.YrInputProvider;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -13,7 +14,7 @@ import javax.ws.rs.core.Response;
 
 @ApplicationScoped
 @Path("/hue")
-public class HelloWorldEndpoint {
+public class WildflyEntryPoint {
 
 	@Inject
 	@SuppressWarnings("unused")
@@ -23,9 +24,14 @@ public class HelloWorldEndpoint {
     @SuppressWarnings("unused")
     private ClockInputProvider clockInputProvider;
 
+	@Inject
+    @SuppressWarnings("unused")
+    private YrInputProvider yrInputProvider;
+
 	@PostConstruct
-	public void HelloWorldEndpoint() {
+	public void registerInputProviders() {
 	    controller.registerInputProvider(clockInputProvider);
+	    controller.registerInputProvider(yrInputProvider);
     }
 
 	@GET

@@ -21,4 +21,9 @@ public class ClockInputProvider implements InputProvider {
         int newBrightness = now.getNano() % 255;
         return new LightState(newBrightness);
     }
+
+    @Override
+    public String toString(){
+        return getClass().getSimpleName();
+    }
 }

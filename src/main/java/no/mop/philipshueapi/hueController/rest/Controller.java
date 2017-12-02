@@ -1,7 +1,6 @@
 package no.mop.philipshueapi.hueController.rest;
 
 import no.mop.philipshueapi.hueController.rest.hueAPI.PhilipsHueConnector;
-import no.mop.philipshueapi.hueController.rest.infrastructure.ThrowingSupplier;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -9,6 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static no.mop.philipshueapi.hueController.rest.infrastructure.ExceptionWrapper.wrapExceptions;
 
 @ApplicationScoped
 public class Controller {
@@ -23,8 +24,8 @@ public class Controller {
         inputProviders = new HashSet<>();
     }
 
-    public boolean registerInputProvider(InputProvider inputProvider) {
-        return inputProviders.add(inputProvider);
+    public void registerInputProvider(InputProvider inputProvider) {
+        inputProviders.add(inputProvider);
     }
 
     public String switchStateOfLights() {
@@ -46,19 +47,22 @@ public class Controller {
     private LightState getNewStateForLight(int lightIndex) {
         Set<LightState> proposedLightStates = getProposedLightStates(lightIndex);
 
-        double newBrightness = proposedLightStates.stream().mapToInt(LightState::getBrightness).average().orElse(0);
+        double newBrightness = Math.max(0, proposedLightStates.stream()
+                .peek(System.out::println)
+                .mapToInt(LightState::getBrightness)
+                .peek(System.out::println)
+                .average()
+                .orElse(0));
+        newBrightness = Math.min(254, newBrightness);
 
         return new LightState((int) newBrightness);
     }
 
     private Set<LightState> getProposedLightStates(int lightIndex) {
         return inputProviders.stream()
+                    .peek(System.out::println)
                     .map(inputProvider -> inputProvider.getNewStateForLight(lightIndex))
+                    .peek(x -> System.out.println("Inputprovider suggested " + x + " for light " + lightIndex))
                     .collect(Collectors.toSet());
     }
-
-    private <T> T wrapExceptions(ThrowingSupplier<T> throwingSupplier) {
-        return throwingSupplier.get();
-    }
-
 }
