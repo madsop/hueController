@@ -18,7 +18,7 @@ public class PhilipsHueConnector {
     @SuppressWarnings("unused")
     private HueURL hueURL;
 
-    public Integer getAllLights() throws IOException {
+    public int getAllLights() throws IOException {
         HttpResponse httpResponse = executeHTTPGet("lights");
         String responseText = getResponseText(httpResponse);
         return Integer.valueOf(responseText);

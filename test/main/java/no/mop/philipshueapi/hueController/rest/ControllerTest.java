@@ -25,7 +25,7 @@ public class ControllerTest {
 
     @Test
     public void forwardsToController() throws IOException {
-        doReturn(Integer.valueOf(2)).when(connector).getAllLights();
+        doReturn(2).when(connector).getAllLights();
         controller.switchStateOfLights();
         verify(connector).switchStateOfLight(eq(0), any());
         verify(connector).switchStateOfLight(eq(1), any());

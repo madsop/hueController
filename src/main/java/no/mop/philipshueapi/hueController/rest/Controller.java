@@ -23,15 +23,19 @@ public class Controller {
         inputProviders = new HashSet<>();
     }
 
+    public boolean registerInputProvider(InputProvider inputProvider) {
+        return inputProviders.add(inputProvider);
+    }
+
     public String switchStateOfLights() {
         return IntStream.range(0, getAllLights())
                 .mapToObj(this::switchStateOfLight)
-                .peek(x -> System.out.println("State of light x: " + x))
+                .peek(x -> System.out.println("State of this light: " + x))
                 .collect(Collectors.joining("\n"));
     }
 
     private int getAllLights() {
-        return wrapExceptions(() -> connector.getAllLights());
+        return wrapExceptions(connector::getAllLights);
     }
 
     private String switchStateOfLight(int lightIndex) {
@@ -44,9 +48,7 @@ public class Controller {
 
         double newBrightness = proposedLightStates.stream().mapToInt(LightState::getBrightness).average().orElse(0);
 
-        LightState newLightState = new LightState((int) newBrightness);
-
-        return newLightState;
+        return new LightState((int) newBrightness);
     }
 
     private Set<LightState> getProposedLightStates(int lightIndex) {
