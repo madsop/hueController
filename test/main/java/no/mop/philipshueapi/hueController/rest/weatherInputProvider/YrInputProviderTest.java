@@ -12,7 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class YrInputProviderTest {
 
     @Spy
-    private YrCacheSaver yrCacheSaver;
+    private YrCacheHandler yrCacheHandler;
 
     @Spy
     private HttpConnector connector;
