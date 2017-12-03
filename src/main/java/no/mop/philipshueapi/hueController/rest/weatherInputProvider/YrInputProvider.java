@@ -1,5 +1,6 @@
 package no.mop.philipshueapi.hueController.rest.weatherInputProvider;
 
+import no.mop.philipshueapi.hueController.rest.Brightness;
 import no.mop.philipshueapi.hueController.rest.InputProvider;
 import no.mop.philipshueapi.hueController.rest.LightState;
 import no.mop.philipshueapi.hueController.rest.hueAPI.HttpConnector;
@@ -46,7 +47,7 @@ public class YrInputProvider implements InputProvider {
         Double temperature = Double.valueOf(temperatureStr);
         int newBrightness = (int) Math.round(temperature);
 
-        return new LightState(newBrightness);
+        return new LightState(new Brightness(newBrightness), null);
     }
 
     @Override

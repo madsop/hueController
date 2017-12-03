@@ -1,5 +1,6 @@
 package no.mop.philipshueapi.hueController.rest.clockInputProvider;
 
+import no.mop.philipshueapi.hueController.rest.Brightness;
 import no.mop.philipshueapi.hueController.rest.InputProvider;
 import no.mop.philipshueapi.hueController.rest.LightState;
 
@@ -19,7 +20,7 @@ public class ClockInputProvider implements InputProvider {
         LocalDateTime now = localDateTimeSupplier.get();
 
         int newBrightness = now.getNano() % 255;
-        return new LightState(newBrightness);
+        return new LightState(new Brightness(newBrightness), null);
     }
 
     @Override

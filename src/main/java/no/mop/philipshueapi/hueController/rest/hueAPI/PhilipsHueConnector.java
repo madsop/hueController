@@ -18,7 +18,7 @@ public class PhilipsHueConnector {
     }
 
     public String switchStateOfLight(int lightIndex, LightState newLightState) throws IOException {
-        String path = "light/" + lightIndex + "/brightness/" + newLightState.getBrightness();
+        String path = "light/" + lightIndex + "/brightness/" + newLightState.getBrightnessInt();
         return getResponseText(path);
     }
 
