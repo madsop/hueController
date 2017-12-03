@@ -23,6 +23,7 @@ public class HttpConnector {
     }
 
     public String executeHTTPGet(String url) throws IOException {
+        System.out.println("Invoking " + url);
         HttpUriRequest request = new HttpGet(url);
         CloseableHttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
         InputStream content = httpResponse.getEntity().getContent();
