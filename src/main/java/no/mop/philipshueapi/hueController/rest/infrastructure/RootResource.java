@@ -5,45 +5,36 @@ import no.mop.philipshueapi.hueController.rest.clockInputProvider.ClockInputProv
 import no.mop.philipshueapi.hueController.rest.weatherInputProvider.YrInputProvider;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-@ApplicationScoped
-@Path("/hue")
-public class WildflyEntryPoint {
+@Path("/")
+public class RootResource {
 
-	@Inject
-	@SuppressWarnings("unused")
-	private Controller controller;
+    @Inject
+    @SuppressWarnings("unused")
+    private Controller controller;
 
-	@Inject
+    @Inject
     @SuppressWarnings("unused")
     private ClockInputProvider clockInputProvider;
 
-	@Inject
+    @Inject
     @SuppressWarnings("unused")
     private YrInputProvider yrInputProvider;
 
-	@PostConstruct
-	public void registerInputProviders() {
-	    controller.registerInputProvider(clockInputProvider);
-	    controller.registerInputProvider(yrInputProvider);
+    @PostConstruct
+    public void registerInputProviders() {
+        controller.registerInputProvider(clockInputProvider);
+        controller.registerInputProvider(yrInputProvider);
     }
 
-	@GET
-	@Produces("text/plain")
-	@Path("/verify")
-	public Response doGet() {
-		return Response.ok("Hello from WildFly Swarm!").build();
-	}
-
-	@GET
-	@Produces("text/plain")
-	public Response switchState() {
-		return Response.ok(controller.switchStateOfLights()).build();
-	}
+    @GET
+    @Produces("text/plain")
+    public Response switchState() {
+        return Response.ok(controller.switchStateOfLights()).build();
+    }
 }
