@@ -1,12 +1,20 @@
 package no.mop.philipshueapi.hueController.rest.hueAPI;
 
-import javax.enterprise.context.Dependent;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-@Dependent
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
+@ApplicationScoped
 public class HueURL {
 
-    private final String host = "localhost";
-    private final String port = "8081";
+    @Inject
+    @ConfigProperty(name="host")
+    private String host;
+
+    @Inject
+    @ConfigProperty(name="port", defaultValue = "8081")
+    private String port;
 
     String getFullURL() {
         return "http://" + host + ":" + port +"/hue/";
