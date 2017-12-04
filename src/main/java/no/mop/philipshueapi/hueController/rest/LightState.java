@@ -8,8 +8,4 @@ import java.awt.*;
 public class LightState {
     private final Brightness brightness;
     private final Color hue;
-
-    public final int getBrightnessInt() {
-        return brightness.getBrightness();
-    }
 }

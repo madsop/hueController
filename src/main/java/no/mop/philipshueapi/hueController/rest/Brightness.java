@@ -2,9 +2,7 @@ package no.mop.philipshueapi.hueController.rest;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
-@ToString
 @EqualsAndHashCode
 public class Brightness {
 
@@ -20,5 +18,10 @@ public class Brightness {
 
     private void log(String message) {
         System.out.println(message);
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(brightness);
     }
 }
