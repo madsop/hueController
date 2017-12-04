@@ -5,6 +5,9 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Retry;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -22,6 +25,9 @@ public class HttpConnector {
         return executeHTTPGet(hueURL.getFullURL() + path);
     }
 
+    @Retry
+    @CircuitBreaker
+    @Fallback(fallbackMethod = "fallback")
     public String executeHTTPGet(String url) throws IOException {
         System.out.println("Invoking " + url);
         HttpUriRequest request = new HttpGet(url);
@@ -31,5 +37,9 @@ public class HttpConnector {
         httpResponse.close();
 
         return responsetext;
+    }
+
+    private String fallback() {
+        return "Could not connect";
     }
 }
