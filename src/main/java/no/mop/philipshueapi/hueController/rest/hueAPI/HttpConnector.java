@@ -13,6 +13,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 @ApplicationScoped
 public class HttpConnector {
@@ -20,6 +21,8 @@ public class HttpConnector {
     @Inject
     @SuppressWarnings("unused")
     private HueURL hueURL;
+
+    private Logger logger = Logger.getLogger(getClass().getSimpleName());
 
     String executeHTTPGetOnHue(String path) throws IOException {
         return executeHTTPGet(hueURL.getFullURL() + path);
@@ -29,7 +32,7 @@ public class HttpConnector {
     @CircuitBreaker
     @Fallback(fallbackMethod = "fallback")
     public String executeHTTPGet(String url) throws IOException {
-        System.out.println("Invoking " + url);
+        logger.info("Invoking " + url);
         HttpUriRequest request = new HttpGet(url);
         CloseableHttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
         InputStream content = httpResponse.getEntity().getContent();

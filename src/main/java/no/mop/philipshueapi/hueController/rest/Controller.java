@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -21,6 +22,7 @@ public class Controller {
     private PhilipsHueConnector connector;
 
     private Set<InputProvider> inputProviders;
+    private Logger logger = Logger.getLogger(getClass().getSimpleName());
 
     public Controller() {
         inputProviders = new HashSet<>();
@@ -33,7 +35,7 @@ public class Controller {
     public String switchStateOfLights() {
         return IntStream.range(0, getAllLights())
                 .mapToObj(this::switchStateOfLight)
-                .peek(x -> System.out.println("State of this light: " + x))
+                .peek(x -> logger.info("State of this light: " + x))
                 .collect(Collectors.joining("\n"));
     }
 
@@ -56,10 +58,10 @@ public class Controller {
 
     private Brightness getNewBrightness(Set<LightState> proposedLightStates) {
         double newBrightness = proposedLightStates.stream()
-                .peek(System.out::println)
+                .peek(x -> logger.info(x.toString()))
                 .map(LightState::getBrightness)
                 .mapToInt(Brightness::getBrightness)
-                .peek(System.out::println)
+                .peek(x -> logger.info(String.valueOf(x)))
                 .average()
                 .orElse(0);
         return new Brightness((int) newBrightness);
@@ -69,7 +71,7 @@ public class Controller {
         double average = proposedLightStates.stream()
                 .map(LightState::getHue)
                 .filter(Objects::nonNull)
-                .peek(x -> System.out.println("New colour: " +x))
+                .peek(x -> logger.info("New colour: " +x))
                 .mapToInt(Color::getRGB)
                 .average()
                 .orElse(0);
@@ -78,9 +80,9 @@ public class Controller {
 
     private Set<LightState> getProposedLightStates(int lightIndex) {
         return inputProviders.stream()
-                    .peek(System.out::println)
+                    .peek(inputProvider -> logger.info(inputProvider.toString()))
                     .map(inputProvider -> inputProvider.getNewStateForLight(lightIndex))
-                    .peek(x -> System.out.println("Inputprovider suggested " + x + " for light " + lightIndex))
+                    .peek(x -> logger.info("Inputprovider suggested " + x + " for light " + lightIndex))
                     .collect(Collectors.toSet());
     }
 }

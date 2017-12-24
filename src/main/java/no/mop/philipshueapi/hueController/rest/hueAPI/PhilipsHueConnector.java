@@ -5,12 +5,15 @@ import no.mop.philipshueapi.hueController.rest.LightState;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 @ApplicationScoped
 public class PhilipsHueConnector {
 
     @Inject
     private HttpConnector httpConnector;
+
+    private Logger logger = Logger.getLogger(getClass().getSimpleName());
 
     public int getAllLights() throws IOException {
         String responseText = getResponseText("lights");
@@ -24,7 +27,7 @@ public class PhilipsHueConnector {
 
     private String getResponseText(String path) throws IOException {
         String responsetext = httpConnector.executeHTTPGetOnHue(path);
-        System.out.println("Responsetext: " + responsetext);
+        logger.fine("Responsetext: " + responsetext);
         return responsetext;
     }
 }
